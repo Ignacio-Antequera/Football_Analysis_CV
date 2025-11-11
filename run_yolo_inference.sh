@@ -3,8 +3,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=30G
 #SBATCH -c 16
-#SBATCH -o /home/iantequera/Football_Analysis_CV/slurm_outputs/%A.out
-#SBATCH -e /home/iantequera/Football_Analysis_CV/slurm_outputs/%A.err
+#SBATCH -o /mnt/homeGPU/iantequera/Football_Analysis_CV/slurm_outputs/%A.out
+#SBATCH -e /mnt/homeGPU/iantequera/Football_Analysis_CV/slurm_outputs/%A.err
 #SBATCH --job-name yolo_inference
 
 eval "$(conda shell.bash hook)"
