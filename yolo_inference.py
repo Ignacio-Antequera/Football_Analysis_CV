@@ -13,7 +13,7 @@ else:
 model = YOLO("yolov8x.pt")  # load a pretrained YOLOv8x model
 
 # Run inference on GPU if available
-results = model.predict(source="input_videos/08fd33_4.mp4", save=True, device=device)
+results = model.predict(source="input_videos/Take_N1.mp4", save=True, device=device)
 print(results[0])
 print("==============================")
 for box in results[0].boxes:

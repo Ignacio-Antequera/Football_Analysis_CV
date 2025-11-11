@@ -1,4 +1,6 @@
 /.venv
+/.conda
+/~
 /runs
 /yolov8x.pt
 /training/football-players-detection-1
