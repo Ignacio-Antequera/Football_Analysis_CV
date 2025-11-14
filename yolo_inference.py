@@ -10,7 +10,7 @@ else:
     print("Running on CPU")
     device = 'cpu'
 
-model = YOLO("yolov8x.pt")  # load a pretrained YOLOv8x model
+model = YOLO("models/best.pt")  # load a pretrained YOLOv8x model
 
 # Run inference on GPU if available
 results = model.predict(source="input_videos/Take_N1.mp4", save=True, device=device)
