@@ -1,6 +1,20 @@
 /.venv
-/.conda
+/football_env
 /~
-/runs
 /yolov8x.pt
 /training/football-players-detection-1
+/extra
+
+# Large model files
+*.pt
+*.pth
+*.onnx
+*.weights
+
+# Large video files
+*.avi
+*.mp4
+*.mov
+
+# Training outputs (runs folder)
+runs/
