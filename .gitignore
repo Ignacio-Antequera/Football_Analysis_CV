@@ -4,6 +4,7 @@
 /yolov8x.pt
 /training/football-players-detection-1
 /extra
+/models
 
 # Large model files
 *.pt
@@ -17,4 +18,4 @@
 *.mov
 
 # Training outputs (runs folder)
-runs/
+/runs
