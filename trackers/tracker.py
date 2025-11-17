@@ -6,6 +6,7 @@ import sys
 sys.path.append('../')
 from utils import get_center_of_bbox, get_bbox_width
 import cv2 as cv
+import numpy as np
 
 class Tracker:
     def __init__(self, model_path, frame_rate=30):
@@ -121,6 +122,21 @@ class Tracker:
         
         return frame
     
+    def draw_triangles(self, frame, bbox, color):
+        y = int(bbox[1])
+        x, _ = get_center_of_bbox(bbox)
+        
+        triangle_points = np.array([
+            [x, y],
+            [x - 10, y - 20],
+            [x + 10, y - 20]
+        ])
+        
+        cv.drawContours(frame, [triangle_points], 0, color, cv.FILLED)
+        cv.drawContours(frame, [triangle_points], 0, (0, 0, 0), 2)
+        
+        return frame
+    
     def draw_annotations(self, video_frames, tracks):
         output_video_frames = []
         for frame_num, frame in enumerate(video_frames):
@@ -137,11 +153,15 @@ class Tracker:
             
             # Draw players
             for track_id, player in player_dict.items():
-                frame = self.draw_elipse(frame, player["bbox"], (0, 0, 255), track_id)
+                frame = self.draw_elipse(frame, player["bbox"], (0, 0, 255))
             
             # Draw referees
             for _, referee in referee_dict.items():
                 frame = self.draw_elipse(frame, referee["bbox"], (0, 255, 255))
+            
+            # Draw ball
+            for _, ball in ball_dict.items():
+                frame = self.draw_triangles(frame, ball["bbox"], (0, 255, 0))
             
             output_video_frames.append(frame)
         
