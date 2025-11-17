@@ -91,7 +91,7 @@ class Tracker:
             center = (x_center, y2),
             axes = (int(width), int(0.35*width)),
             angle=0,
-            startAngle=45,
+            startAngle=-45,
             endAngle=235,
             color=color,
             thickness=2,
