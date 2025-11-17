@@ -11,19 +11,14 @@ import numpy as np
 class Tracker:
     def __init__(self, model_path, frame_rate=30):
         self.model = YOLO(model_path)
-        self.tracker = sv.ByteTrack(
-            track_activation_threshold=0.25,
-            lost_track_buffer=30,
-            minimum_matching_threshold=0.8,
-            frame_rate=frame_rate
-        )
+        self.tracker = sv.ByteTrack()
         
     def detect_frames(self, frames):
         batch_size = 20
         detections = []
         
         for i in range(0, len(frames), batch_size):
-            detections_batch = self.model.predict(frames[i:i+batch_size], conf=0.3)
+            detections_batch = self.model.predict(frames[i:i+batch_size], conf=0.1)
             detections += detections_batch
         return detections
     
