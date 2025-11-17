@@ -2,6 +2,10 @@ from ultralytics import YOLO
 import supervision as sv
 import pickle
 import os
+import sys
+sys.path.append('../')
+from utils import get_center_of_bbox, get_bbox_width
+import cv2 as cv
 
 class Tracker:
     def __init__(self, model_path):
@@ -15,7 +19,6 @@ class Tracker:
         for i in range(0, len(frames), batch_size):
             detections_batch = self.model.predict(frames[i:i+batch_size], conf = 0.1)
             detections += detections_batch
-            break
         return detections
     
     def get_object_tracks(self, frames, read_from_stub = False, stub_path = None):
@@ -77,3 +80,44 @@ class Tracker:
                 pickle.dump(tracks, f)
                      
         return tracks
+
+    def draw_elipse(self, frame, bbox, color, track_id):
+        y2 = int(bbox[3])
+        x_center, _ = get_center_of_bbox(bbox)
+        width = get_bbox_width(bbox)
+        
+        cv.ellipse(
+            frame,
+            center = (x_center, y2),
+            axes = (int(width), int(0.35*width)),
+            angle=0,
+            startAngle=45,
+            endAngle=235,
+            color=color,
+            thickness=2,
+            lineType=cv.LINE_4
+            )
+        
+        return frame
+    
+    def draw_annotations(self, video_frames, tracks):
+        output_video_frames = []
+        for frame_num, frame in enumerate(video_frames):
+            frame = frame.copy()
+            
+            # Only draw if we have tracking data for this frame
+            if frame_num >= len(tracks["players"]):
+                output_video_frames.append(frame)
+                continue
+            
+            player_dict = tracks["players"][frame_num]
+            referee_dict = tracks["referees"][frame_num]
+            ball_dict = tracks["ball"][frame_num]
+            
+            # Draw players
+            for track_id, player in player_dict.items():
+                frame = self.draw_elipse(frame, player["bbox"], (0, 0, 255), track_id)
+                
+            output_video_frames.append(frame)
+        
+        return output_video_frames
