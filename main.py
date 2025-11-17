@@ -3,7 +3,7 @@ from trackers import Tracker
 
 def main():
     # Read video frames
-    video_frames = read_video("input_videos/Take_N1.mp4")
+    video_frames, fps = read_video("input_videos/Take_N1.mp4")
     
     # Initialize tracker with the first frame
     tracker = Tracker("models/best.pt")
@@ -18,7 +18,7 @@ def main():
     output_video_frames = tracker.draw_annotations(video_frames, tracks)
     
     # Save video frames
-    save_video(output_video_frames, "output_videos/Take_N1_output.avi")
+    save_video(output_video_frames, "output_videos/Take_N1_output.avi", fps=fps)
     
 if __name__ == "__main__":
     main()
