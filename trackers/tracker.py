@@ -8,16 +8,21 @@ from utils import get_center_of_bbox, get_bbox_width
 import cv2 as cv
 
 class Tracker:
-    def __init__(self, model_path):
+    def __init__(self, model_path, frame_rate=30):
         self.model = YOLO(model_path)
-        self.tracker = sv.ByteTrack()
+        self.tracker = sv.ByteTrack(
+            track_activation_threshold=0.25,
+            lost_track_buffer=30,
+            minimum_matching_threshold=0.8,
+            frame_rate=frame_rate
+        )
         
     def detect_frames(self, frames):
         batch_size = 20
         detections = []
         
         for i in range(0, len(frames), batch_size):
-            detections_batch = self.model.predict(frames[i:i+batch_size], conf = 0.1)
+            detections_batch = self.model.predict(frames[i:i+batch_size], conf=0.3)
             detections += detections_batch
         return detections
     
@@ -81,7 +86,7 @@ class Tracker:
                      
         return tracks
 
-    def draw_elipse(self, frame, bbox, color, track_id):
+    def draw_elipse(self, frame, bbox, color, track_id = None):
         y2 = int(bbox[3])
         x_center, _ = get_center_of_bbox(bbox)
         width = get_bbox_width(bbox)
@@ -135,8 +140,8 @@ class Tracker:
                 frame = self.draw_elipse(frame, player["bbox"], (0, 0, 255), track_id)
             
             # Draw referees
-            for track_id, referee in referee_dict.items():
-                frame = self.draw_elipse(frame, referee["bbox"], (0, 255, 255), track_id)
+            for _, referee in referee_dict.items():
+                frame = self.draw_elipse(frame, referee["bbox"], (0, 255, 255))
             
             output_video_frames.append(frame)
         

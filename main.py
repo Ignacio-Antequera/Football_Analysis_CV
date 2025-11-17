@@ -6,7 +6,7 @@ def main():
     video_frames, fps = read_video("input_videos/Take_N1.mp4")
     
     # Initialize tracker with the first frame
-    tracker = Tracker("models/best.pt")
+    tracker = Tracker("models/best.pt", frame_rate=fps)
     
     tracks = tracker.get_object_tracks(video_frames,
                                        read_from_stub = True,
