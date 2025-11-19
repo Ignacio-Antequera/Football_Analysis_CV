@@ -13,18 +13,6 @@ def main():
                                        read_from_stub = True,
                                        stub_path = "stubs/track_stubs.pkl")
     
-    # Save cropped image of a player
-    for track_id, player in tracks["players"][0].items():
-        bbox = player['bbox']
-        frame = video_frames[0]
-        
-        # Crop the player from the frame
-        cropped_image = frame[int(bbox[1]):int(bbox[3]), int(bbox[0]):int(bbox[2])]
-        
-        # Save the cropped image
-        cv.imwrite(f"output_videos/croppped_image.jpg", cropped_image)
-        break
-    
     # Draw annotations on video frames
     
     ## Draw object tracks
