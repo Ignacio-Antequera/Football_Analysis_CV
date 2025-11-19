@@ -16,7 +16,7 @@ def main():
     
     # Assign teams to players
     team_assigner = TeamAssigner()
-    team_assigner.assign_team_color(video_frames[0], tracks)
+    team_assigner.assign_team_color(video_frames[0], tracks['players'][0])
     
     for frame_num, player_track in enumerate(tracks['players']):
         for player_id, track in player_track.items():
@@ -28,7 +28,7 @@ def main():
     # Draw annotations on video frames
     
     ## Draw object tracks
-    output_video_frames = tracker.draw_annotations(video_frames, tracks['players'][0])
+    output_video_frames = tracker.draw_annotations(video_frames, tracks)
     
     # Save video frames
     save_video(output_video_frames, "output_videos/Take_N1_output.avi", fps=fps)
