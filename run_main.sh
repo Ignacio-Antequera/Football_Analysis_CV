@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -p dios
+#SBATCH -p dgx,dgx2,dios
 #SBATCH --gres=gpu:1
 #SBATCH --mem=30G
 #SBATCH -c 16
