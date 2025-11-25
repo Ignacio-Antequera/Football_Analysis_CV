@@ -153,33 +153,31 @@ class Tracker:
 
         return frame
     
-    def draw_annotations(self, video_frames, tracks):
-        output_video_frames = []
+    def draw_annotations(self,video_frames, tracks,):
+        output_video_frames= []
         for frame_num, frame in enumerate(video_frames):
             frame = frame.copy()
-            
-            # Only draw if we have tracking data for this frame
-            if frame_num >= len(tracks["players"]):
-                output_video_frames.append(frame)
-                continue
-            
+
             player_dict = tracks["players"][frame_num]
-            referee_dict = tracks["referees"][frame_num]
             ball_dict = tracks["ball"][frame_num]
-            
-            # Draw players
+            referee_dict = tracks["referees"][frame_num]
+
+            # Draw Players
             for track_id, player in player_dict.items():
-                color = player.get("team_color", (0, 0, 255))
-                frame = self.draw_elipse(frame, player["bbox"], color)
-            
-            # Draw referees
+                color = player.get("team_color",(0,0,255))
+                frame = self.draw_ellipse(frame, player["bbox"],color, track_id)
+
+                if player.get('has_ball',False):
+                    frame = self.draw_triangle(frame, player["bbox"],(0,0,255))
+
+            # Draw Referee
             for _, referee in referee_dict.items():
-                frame = self.draw_elipse(frame, referee["bbox"], (0, 255, 255))
+                frame = self.draw_ellipse(frame, referee["bbox"],(0,255,255))
             
-            # Draw ball
-            for _, ball in ball_dict.items():
-                frame = self.draw_triangles(frame, ball["bbox"], (0, 255, 0))
-            
+            # Draw ball 
+            for track_id, ball in ball_dict.items():
+                frame = self.draw_triangle(frame, ball["bbox"],(0,255,0))
+
             output_video_frames.append(frame)
-        
+
         return output_video_frames
