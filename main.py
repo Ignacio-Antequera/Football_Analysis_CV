@@ -7,14 +7,14 @@ from team_assigner import TeamAssigner
 
 def main():
     # Read Video
-    video_frames, fps = read_video('input_videos/Take_N1.mp4')
+    video_frames, fps = read_video('input_videos/08fd33_4.mp4')
 
     # Initialize Tracker
     tracker = Tracker('models/best.pt')
 
     tracks = tracker.get_object_tracks(video_frames,
-                                       read_from_stub=True,
-                                       stub_path='stubs/Take_N1_track_stubs.pkl')
+                                       read_from_stub=False,
+                                       stub_path='stubs/08fd33_4.pkl')
 
     # Interpolate Ball Positions
     tracks["ball"] = tracker.interpolate_ball_positions(tracks["ball"])
@@ -37,7 +37,7 @@ def main():
     output_video_frames = tracker.draw_annotations(video_frames, tracks)
 
     # Save video
-    save_video(output_video_frames, 'output_videos/output_Take_N1.avi', fps=fps)
+    save_video(output_video_frames, 'output_videos/output_08fd33_4.avi', fps=fps)
 
 if __name__ == '__main__':
     main()
