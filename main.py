@@ -11,14 +11,14 @@ from speed_and_distance_estimator import SpeedAndDistance_Estimator
 
 def main():
     # Read Video
-    video_frames, fps = read_video('input_videos/Take_N1.mp4')
+    video_frames, fps = read_video('input_videos/Take_N3.mp4')
 
     # Initialize Tracker
     tracker = Tracker('models/best.pt')
 
     tracks = tracker.get_object_tracks(video_frames,
                                        read_from_stub=False,
-                                       stub_path='stubs/Take_N1_track_stubs.pkl')
+                                       stub_path='stubs/Take_N3_track_stubs.pkl')
     # Get object positions 
     tracker.add_position_to_tracks(tracks)
 
@@ -26,7 +26,7 @@ def main():
     camera_movement_estimator = CameraMovementEstimator(video_frames[0])
     camera_movement_per_frame = camera_movement_estimator.get_camera_movement(video_frames,
                                                                                 read_from_stub=False,
-                                                                                stub_path='stubs/Take_N1_camera_movement_stub.pkl')
+                                                                                stub_path='stubs/Take_N3_camera_movement_stub.pkl')
     camera_movement_estimator.add_adjust_positions_to_tracks(tracks,camera_movement_per_frame)
 
 
@@ -82,7 +82,7 @@ def main():
     speed_and_distance_estimator.draw_speed_and_distance(output_video_frames,tracks)
 
     # Save video
-    save_video(output_video_frames, 'output_videos/Take_N1_output_video.avi', fps=fps)
+    save_video(output_video_frames, 'output_videos/Take_N3_output_video.avi', fps=fps)
 
 if __name__ == '__main__':
     main()
