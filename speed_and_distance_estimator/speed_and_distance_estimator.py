@@ -4,9 +4,9 @@ sys.path.append('../')
 from utils import measure_distance ,get_foot_position
 
 class SpeedAndDistance_Estimator():
-    def __init__(self):
-        self.frame_window=5
-        self.frame_rate=24
+    def __init__(self, frame_rate=24):
+        self.frame_window=10  # Increased for more stable measurements
+        self.frame_rate=frame_rate
     
     def add_speed_and_distance_to_tracks(self,tracks):
         total_distance= {}
@@ -31,12 +31,21 @@ class SpeedAndDistance_Estimator():
                     distance_covered = measure_distance(start_position,end_position)
                     time_elapsed = (last_frame-frame_num)/self.frame_rate
                     
-                    # Avoid division by zero
-                    if time_elapsed == 0:
+                    # Filter out tracking noise - ignore tiny movements (less than 0.2 meters)
+                    if distance_covered < 0.2:
+                        distance_covered = 0
+                        speed_km_per_hour = 0
+                    # Avoid division by zero and unrealistic speeds
+                    elif time_elapsed == 0 or time_elapsed < 0.01:
                         speed_km_per_hour = 0
                     else:
                         speed_meteres_per_second = distance_covered/time_elapsed
                         speed_km_per_hour = speed_meteres_per_second*3.6
+                        
+                        # Cap unrealistic speeds (max human sprint ~44 km/h)
+                        if speed_km_per_hour > 50:
+                            speed_km_per_hour = 0
+                            distance_covered = 0
 
                     if object not in total_distance:
                         total_distance[object]= {}
