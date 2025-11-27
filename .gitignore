@@ -13,8 +13,6 @@
 *.weights
 
 # Large video files
-*.avi
-*.mp4
 *.mov
 
 # Training outputs (runs folder)
